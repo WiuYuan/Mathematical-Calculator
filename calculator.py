@@ -118,14 +118,15 @@ def latex_equ_print(equ : Equation):
         latex_equ_print(equ.var[1])
         f.write(')')
     if equ.type == '/':
-        f.write('\\frac{')
+        f.write('(\\frac{')
         latex_equ_print(equ.var[0])
         f.write('}{')
         latex_equ_print(equ.var[1])
-        f.write('}')
+        f.write('})')
     if equ.type == '^':
+        f.write('{')
         latex_equ_print(equ.var[0])
-        f.write('^{')
+        f.write('}^{')
         latex_equ_print(equ.var[1])
         f.write('}')
     if equ.type == 'sqrt':
@@ -946,6 +947,9 @@ def cancel_num(Equ : Equation):
                 else:
                     equ1 = equ1-math.comb(n,i)*(equ.var[0].var[0]^i)*(equ.var[0].var[1]^(n-i))
             equ = equ_copy(equ1)
+            return equ
+        if equ.var[0].type == '/':
+            equ = (equ.var[0].var[0]^equ.var[1])/(equ.var[0].var[1]^equ.var[1])
             return equ
     if equ.type == 'sqrt':
         equ.var = cancel_num(equ.var)
